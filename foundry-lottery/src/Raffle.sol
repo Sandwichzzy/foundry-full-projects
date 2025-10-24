@@ -4,13 +4,13 @@ pragma solidity ^0.8.19;
 import {VRFConsumerBaseV2Plus} from
     "lib/chainlink-brownie-contracts/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol";
 import {VRFV2PlusClient} from "lib/chainlink-brownie-contracts/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
-
 /**
  * @title A simple Raffle Contract
  * @author Sandwich
  * @notice This contract is for creating a simple raffle system.
  * @dev Implements Chainlink VRFv2.5
  */
+
 contract Raffle is VRFConsumerBaseV2Plus {
     /* Errors */
     error Raffle__SendMoreToEnterRaffle();
@@ -42,6 +42,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
     /* Events */
     event RaffleEnter(address indexed player);
     event WinnerPicked(address indexed winner);
+    event RequestedRaffleWinner(uint256 indexed requestId);
 
     constructor(
         uint256 entranceFee,
@@ -115,9 +116,10 @@ contract Raffle is VRFConsumerBaseV2Plus {
             requestConfirmations: REQUEST_CONFIRMATIONS,
             callbackGasLimit: i_callbackGasLimit,
             numWords: NUM_WORDS,
-            extraArgs: VRFV2PlusClient._argsToBytes(VRFV2PlusClient.ExtraArgsV1({nativePayment: true}))
+            extraArgs: VRFV2PlusClient._argsToBytes(VRFV2PlusClient.ExtraArgsV1({nativePayment: false}))
         });
         uint256 requestId = s_vrfCoordinator.requestRandomWords(req);
+        emit RequestedRaffleWinner(requestId); //just for test ,actually it is emitted by vrfCoordinator
     }
 
     //CEI:Checks-Effects-Interactions
@@ -153,5 +155,13 @@ contract Raffle is VRFConsumerBaseV2Plus {
 
     function getPlayer(uint256 index) external view returns (address) {
         return s_players[index];
+    }
+
+    function getLastTimeStamp() external view returns (uint256) {
+        return s_lastTimeStamp;
+    }
+
+    function getRecentWinner() external view returns (address) {
+        return s_recentWinner;
     }
 }

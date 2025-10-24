@@ -12,7 +12,7 @@ abstract contract CodeConstants {
     uint96 public constant MOCK_BASE_FEE = 0.25 ether;
     uint96 public constant MOCK_GAS_PRICE_LINK = 1e9; // 0.000000001 LINK per gas
     // LINK / ETH price
-    int256 public constant MOCK_WEI_PER_UNIT_LINK = 4e15; // 0.004 ETH per LINK
+    int256 public constant MOCK_WEI_PER_UNIT_LINK = 4e15; // 1 ETH per LINK
 
     uint256 public constant ETH_SEPOLIA_CHAINID = 11155111;
     uint256 public constant ETH_MAINNET_CHAIN_ID = 1;
@@ -36,6 +36,7 @@ contract HelperConfig is Script, CodeConstants {
         uint256 subscriptionId;
         uint32 callbackGasLimit;
         address link;
+        address account;
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -77,7 +78,8 @@ contract HelperConfig is Script, CodeConstants {
             gasLane: 0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae,
             subscriptionId: 108043291848657473454615173805701883080905891857318495267163205071008098540496,
             callbackGasLimit: 500000, //500000gas
-            link: 0x779877A7B0D9E8603169DdbD7836e478b4624789
+            link: 0x779877A7B0D9E8603169DdbD7836e478b4624789,
+            account: 0x6002BaD747AfD5690f543a670f3e3bD30E033084
         });
     }
 
@@ -100,7 +102,8 @@ contract HelperConfig is Script, CodeConstants {
             gasLane: 0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae,
             subscriptionId: 0,
             callbackGasLimit: 500000,
-            link: address(linkToken)
+            link: address(linkToken),
+            account: 0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38
         });
         return localNetworkConfig;
     }
