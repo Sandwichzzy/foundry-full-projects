@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 
 pragma solidity ^0.8.13;
 
@@ -40,7 +40,7 @@ contract OracleMock {
         uint256[3] memory randomNumbers;
         for (uint8 i = 0; i < 3; i++) {
             randomNumbers[i] =
-                (uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender, nonce, i))) % 6) + 1;
+                (uint256(keccak256(abi.encodePacked(block.timestamp, block.prevrandao, msg.sender, nonce, i))) % 6) + 1;
         }
         nonce++;
 

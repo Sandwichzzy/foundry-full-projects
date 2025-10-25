@@ -97,18 +97,19 @@ anvil
   GamblingGameManager Proxy deployed at: 0x32aFe2A0ac95eaDddf3a9A4AcFCb71C2CB26987B
   GamblingGameManager Implementation deployed at: 0xCa1279C9c971870E743e7414d4730c77e8dcD579
   ProxyAdmin deployed at: 0xDB792656F27441B97836B18C3075743d6b9def82
-
-/ Layout of Contract:
-// license
-// version
-// imports
-// errors
-// interfaces, libraries, contracts
-// Type declarations
-// State variables
-// Events
-// Modifiers
-// Functions
+  OracleMock deployed at: 0xfa4aF9Eccc9eC013A2E4Ee2F2b940e12A3f6CdF6
+  LuckDrawManager implementation deployed at: 0xc4964c3d6372F1f7942cC61EE69c0eCCB7c56248
+  / Layout of Contract:
+  // license
+  // version
+  // imports
+  // errors
+  // interfaces, libraries, contracts
+  // Type declarations
+  // State variables
+  // Events
+  // Modifiers
+  // Functions
 
 // Layout of Functions:
 // constructor

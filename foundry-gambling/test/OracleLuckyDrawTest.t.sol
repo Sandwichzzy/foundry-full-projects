@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
@@ -51,6 +51,7 @@ contract OracleLuckyDrawTest is Test {
         // 给玩家分配代币
         usdt.transfer(player1, 1000 * 10 ** 6); // 1000 USDT
         usdt.transfer(player2, 1000 * 10 ** 6); // 1000 USDT
+        usdt.transfer(address(gamblingGame), 100000 * 10 ** 6); //100000USDT
 
         vm.stopPrank();
     }
@@ -104,9 +105,6 @@ contract OracleLuckyDrawTest is Test {
     }
 
     function testMultipleOracleRequests() public {
-        // 测试多次Oracle请求
-        vm.startPrank(luckyDrawer);
-
         for (uint256 i = 0; i < 3; i++) {
             // 玩家下注
             vm.startPrank(player1);
