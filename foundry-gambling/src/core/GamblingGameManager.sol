@@ -75,7 +75,7 @@ contract GamblingGameManager is IGamblingGameManager, Initializable, OwnableUpgr
     }
 
     //CEI
-    function createBettor(uint256 _amount, uint8 _betType) external returns (bool) {
+    function createBettor(uint256 _amount, uint8 _betType) external nonReentrant returns (bool) {
         require(
             _betType >= uint8(BettorType.Big) && _betType <= uint8(BettorType.Double),
             "GamblingGameManager:createBettor: invalid bet type"
@@ -164,7 +164,7 @@ contract GamblingGameManager is IGamblingGameManager, Initializable, OwnableUpgr
         return betteToken.balanceOf(address(this));
     }
 
-    function allocateReward(GuessBettor memory guessBettor, uint256 _rewardValue) internal {
+    function allocateReward(GuessBettor memory guessBettor, uint256 _rewardValue) internal nonReentrant {
         guessBettor.isReward = true; // 中奖
         guessBettor.rewardAmount = _rewardValue;
         IERC20(betteToken).safeTransfer(guessBettor.account, _rewardValue);
