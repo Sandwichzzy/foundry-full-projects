@@ -33,7 +33,7 @@ anvil :; anvil -m 'test test test test test test test test test test test junk' 
 # verify :; forge verify-contract 0xA464d41eE745af9274305D455fD0274Bd5669F8B src/Raffle.sol:Raffle --etherscan-api-key $(ETHERSCAN_API_KEY) --rpc-url $(SEPOLIA_RPC_URL) --show-standard-json-input > json.json
 # wallet :; cast wallet import <accountName> --interactive
 # verify-roothash:;
-# forge verify-contract --rpc-url https://rpc-testnet.roothashpay.com --verifier blockscout --verifier-url "https://explorer-testnet.roothashpay.com/api/" 0xfa4aF9Eccc9eC013A2E4Ee2F2b940e12A3f6CdF6 .test/mocks/mockOracle.sol:OracleMock
+# forge verify-contract --rpc-url https://rpc-testnet.roothashpay.com --verifier blockscout --verifier-url "https://explorer-testnet.roothashpay.com/api/" 0x827CECc85B7b14E345F501bf2D307736f072487d src/VrfMinProxyFactory.sol:VrfMinProxyFactory
 # --show-standard-json-input > json.json
 NETWORK_ARGS := --rpc-url http://localhost:8545 --private-key $(DEFAULT_ANVIL_KEY) --broadcast
 NETWORK_SEPOLIA:= --rpc-url $(SEPOLIA_RPC_URL) --account devWallet --broadcast --verify --etherscan-api-key $(ETHERSCAN_API_KEY) -vvvv

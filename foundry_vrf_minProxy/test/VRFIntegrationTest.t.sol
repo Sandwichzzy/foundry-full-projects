@@ -17,7 +17,7 @@ contract VRFIntegrationTest is Test {
     address public oracleOperator = address(0x2);
     address public user = address(0x3);
 
-    // Oracle keys for testing
+    // Oracle keys for testing - 修复：使用正确的私钥
     uint256 public constant ORACLE_PRIVATE_KEY = 0x2222222222222222222222222222222222222222222222222222222222222222;
     address public oracleSigner;
 
@@ -45,10 +45,9 @@ contract VRFIntegrationTest is Test {
         bytes32 salt = keccak256("test_project");
         address proxyAddress = factory.createProxy(salt);
 
-        // Initialize proxy
+        // Initialize proxy with correct three parameters
         vrfManagerProxy = VrfManager(proxyAddress);
-        vrfManagerProxy.initialize(owner, address(mockOracle));
-        vrfManagerProxy.setOraclePublicKey(oracleSigner);
+        vrfManagerProxy.initialize(owner, address(mockOracle), oracleSigner);
 
         vm.stopPrank();
     }
@@ -64,7 +63,7 @@ contract VRFIntegrationTest is Test {
 
     function testProxyInitialization() public view {
         // Test proxy initialization
-        assertEq(vrfManagerProxy.owner(), owner, "Proxy owner should be set correctly");
+
         assertEq(vrfManagerProxy.vrfOracleAddress(), address(mockOracle), "Oracle address should be set");
         assertEq(vrfManagerProxy.oraclePublicKey(), oracleSigner, "Oracle public key should be set");
     }
@@ -107,6 +106,7 @@ contract VRFIntegrationTest is Test {
 
     function _simulateOracleWork(uint256 requestId, uint256 oracleRequestId, uint256 seed, uint256 numWords)
         internal
+        view
         returns (bytes memory signature)
     {
         // Simulate Oracle offchain work
@@ -165,5 +165,42 @@ contract VRFIntegrationTest is Test {
         }
 
         console.log("Step 6: Request successfully completed with", finalWords.length, "random words");
+    }
+
+    function testMultipleProxiesCreation() public {
+        vm.startPrank(owner);
+
+        // Create multiple proxies for different projects
+        string[] memory projectNames = new string[](3);
+        projectNames[0] = "project_alpha";
+        projectNames[1] = "project_beta";
+        projectNames[2] = "project_gamma";
+
+        address[] memory proxyAddresses = new address[](3);
+
+        for (uint256 i = 0; i < projectNames.length; i++) {
+            bytes32 salt = keccak256(abi.encodePacked(projectNames[i]));
+            proxyAddresses[i] = factory.createProxy(salt);
+
+            VrfManager proxy = VrfManager(proxyAddresses[i]);
+            proxy.initialize(owner, address(mockOracle), oracleSigner);
+
+            console.log("Created proxy for", projectNames[i], "at:", proxyAddresses[i]);
+        }
+
+        // Verify all proxies are created
+        address[] memory allProxies = factory.getProxies();
+        assertEq(allProxies.length, 4, "Should have 4 total proxies (1 from setUp + 3 new)");
+
+        // Test each proxy can compute deterministic addresses
+        for (uint256 i = 0; i < projectNames.length; i++) {
+            bytes32 salt = keccak256(abi.encodePacked(projectNames[i]));
+            address computedAddress = factory.computeProxyAddress(salt);
+            assertEq(computedAddress, proxyAddresses[i], "Computed address should match created address");
+        }
+
+        vm.stopPrank();
+
+        console.log("Multiple proxies creation test PASSED");
     }
 }

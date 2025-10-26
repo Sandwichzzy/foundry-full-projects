@@ -13,19 +13,23 @@ contract DeployMinProxyVRFScript is Script {
     VrfMinProxyFactory public proxyFactory;
     MockVrfOracle public mockOracle;
 
-    // Oracle私钥地址（在测试中使用固定地址）
-    address public constant ORACLE_SIGNER = 0x6002BaD747AfD5690f543a670f3e3bD30E033084; // Hardhat测试账户#1
+    // Oracle签名者地址 - 这应该是拥有私钥的地址，用于签名验证
+    address public constant ORACLE_SIGNER = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8; // 测试账户#1
 
     function run() external {
+        address deployer = msg.sender;
+        console.log("Deploying with address:", deployer);
+        console.log("Oracle signer will be:", ORACLE_SIGNER);
+
         vm.startBroadcast();
 
-        // 1. 部署MockVrfOracle
+        // 1. 部署MockVrfOracle - 使用ORACLE_SIGNER作为签名者
         mockOracle = new MockVrfOracle(ORACLE_SIGNER);
         console.log("MockVrfOracle deployed at:", address(mockOracle));
 
-        // 2. 设置Oracle操作员
-        mockOracle.setOracleOperator(msg.sender);
-        console.log("Oracle operator set to:", msg.sender);
+        // 2. 设置Oracle操作员为部署者
+        mockOracle.setOracleOperator(deployer);
+        console.log("Oracle operator set to:", deployer);
 
         // 3. 部署VrfManager实现合约
         vrfManagerImplementation = new VrfManager();
@@ -40,26 +44,31 @@ contract DeployMinProxyVRFScript is Script {
         address proxyAddress = proxyFactory.createProxy(salt);
         console.log("First proxy created at:", proxyAddress);
 
-        // 6. 初始化代理合约
+        // 6. 初始化代理合约 - 注意：现在传递三个参数
         VrfManager proxy = VrfManager(proxyAddress);
-        proxy.initialize(msg.sender, address(mockOracle));
+        proxy.initialize(deployer, address(mockOracle), ORACLE_SIGNER);
 
-        // 7. 设置Oracle公钥（使用ORACLE_SIGNER地址）
-        proxy.setOraclePublicKey(ORACLE_SIGNER);
-        console.log("Proxy initialized with owner:", msg.sender);
+        console.log("Proxy initialized with owner:", deployer);
+        console.log("Oracle address set to:", address(mockOracle));
         console.log("Oracle public key set to:", ORACLE_SIGNER);
 
-        // 8. 验证部署
+        // 7. 验证部署
         address[] memory allProxies = proxyFactory.getProxies();
         console.log("Total proxies created:", allProxies.length);
+
+        // 8. 验证初始化状态
+        bool isInitialized = proxy.isInitialized();
+        console.log("Proxy initialization status:", isInitialized);
 
         vm.stopBroadcast();
     }
 
     /**
-     * @dev 为新项目创建代理合约（带签名验证功能）
+     * @dev 为新项目创建代理合约
      */
     function createProjectProxyWithOracle(string memory projectName, address projectOwner) external {
+        require(address(proxyFactory) != address(0), "Factory not deployed yet");
+
         vm.startBroadcast();
 
         bytes32 salt = keccak256(abi.encodePacked(projectName));
@@ -78,12 +87,12 @@ contract DeployMinProxyVRFScript is Script {
         console.log("New proxy created for project:", projectName);
         console.log("Address:", proxyAddress);
 
-        // 初始化代理合约
+        // 初始化代理合约 - 使用正确的三参数初始化
         VrfManager proxy = VrfManager(proxyAddress);
-        proxy.initialize(projectOwner, address(mockOracle));
-        proxy.setOraclePublicKey(ORACLE_SIGNER);
+        proxy.initialize(projectOwner, address(mockOracle), ORACLE_SIGNER);
+
         console.log("Proxy initialized with owner:", projectOwner);
-        console.log("Oracle configured for signature verification");
+        console.log("Oracle public key set to:", ORACLE_SIGNER);
         console.log("Proxy address for project:", projectName, "is", proxyAddress);
 
         vm.stopBroadcast();

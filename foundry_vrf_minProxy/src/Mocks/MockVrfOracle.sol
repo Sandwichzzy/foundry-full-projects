@@ -28,7 +28,7 @@ contract MockVrfOracle is Ownable, IMockVrfOracle {
     mapping(address => uint256[]) public vrfManagerRequests; // 每个VrfManager的请求列表
     uint256 public nextRequestId = 1;
 
-    // Oracle私钥持有者地址（在实际应用中应该保密）
+    // Oracle私钥地址（測試賬號应该保密）
     address public oracleSigner;
 
     // Oracle操作者，可以触发fulfillment
