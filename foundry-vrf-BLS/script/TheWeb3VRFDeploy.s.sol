@@ -18,7 +18,6 @@ contract TheWeb3VRFDepolyScript is Script {
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         address deployerAddress = vm.addr(deployerPrivateKey);
-
         vm.startBroadcast();
 
         // 第一步：使用 OpenZeppelin Foundry Upgrades 部署 EmptyContract 的 UUPS 代理
@@ -35,18 +34,16 @@ contract TheWeb3VRFDepolyScript is Script {
         // 第二步：将代理从 EmptyContract 升级到 BLSApkRegistry
         console.log("Step 2: Upgrading EmptyContract to BLSApkRegistry...");
 
-        // 使用 upgradeProxy 进行升级，不调用 initialize
-        Upgrades.upgradeProxy(proxy, "BLSApkRegistry.sol:BLSApkRegistry", "");
+        // 使用 upgradeProxy 进行升级，调用 initializeV2
+        Upgrades.upgradeProxy(
+            proxy,
+            "BLSApkRegistry.sol:BLSApkRegistry",
+            abi.encodeCall(BLSApkRegistry.initializeV2, (deployerAddress, deployerAddress, deployerAddress))
+        );
 
         console.log("Successfully upgraded to BLSApkRegistry at:", proxy);
 
-        // 调用升级后的初始化函数 initializeV2
         blsApkRegistry = BLSApkRegistry(proxy);
-        blsApkRegistry.initializeV2(
-            deployerAddress, // whitelistManager
-            deployerAddress // vrfManagerAddress
-        );
-        console.log("BLSApkRegistry initializeV2 completed with additional parameters");
 
         // 第三步：部署其他合约
         console.log("Step 3: Deploying other contracts...");
@@ -64,7 +61,7 @@ contract TheWeb3VRFDepolyScript is Script {
         console.log("\n=== Deployment Summary ===");
         console.log("UUPS Proxy Address (EmptyContract -> BLSApkRegistry):", proxy);
         console.log("TheWeb3VRFManager:", address(theWeb3VRF));
-        console.log("VrfMinProxyFactory:", address(theweb3VRFFactory));
+        console.log("TheWeb3VRFFactory:", address(theweb3VRFFactory));
         console.log("TheWeb3Pod proxy:", proxyTheWeb3Pod);
 
         // 验证升级是否成功

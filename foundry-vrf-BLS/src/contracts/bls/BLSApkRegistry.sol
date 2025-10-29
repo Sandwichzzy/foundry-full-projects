@@ -47,19 +47,16 @@ contract BLSApkRegistry is Initializable, IBLSApkRegistry, OwnableUpgradeable, E
         _;
     }
 
-    function initialize(address _initialOwner, address _whitelistManager, address _vrfManagerAddress)
+    ///@custom:oz-upgrades-validate-as-initializer
+    function initializeV2(address _initialOwner, address _whitelistManager, address _vrfManagerAddress)
         external
-        initializer
+        reinitializer(2)
     {
-        __Ownable_init(_initialOwner);
+        // 重新初始化父合约（即使已经初始化过，使用 reinitializer(2) 是安全的）
+        __Ownable_init(_initialOwner); // 保持原有所有者
         __UUPSUpgradeable_init();
-        _disableInitializers(); // 禁用后续初始化
-    }
-
-    function initializeV2(address _whitelistManager, address _vrfManagerAddress) external reinitializer(2) {
-        // __Ownable_init(_initialOwner);
         __EIP712_init("BLSApkRegistry", "v0.0.1");
-        // __UUPSUpgradeable_init();
+
         whitelistManager = _whitelistManager;
         vrfManagerAddress = _vrfManagerAddress;
         _initializeApk();
