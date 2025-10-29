@@ -133,7 +133,7 @@ forge script script/TheWeb3VRFDeploy.s.sol:TheWeb3VRFDepolyScript $(NETWORK_ROOT
 
 ## 📊 已部署合约地址
 
-### 最新部署 (本地测试网)
+### 最新部署 (RootHash TestNet: https://explorer-testnet.roothashpay.com/)
 
 ```
 🔗 UUPS Proxy (EmptyContract -> BLSApkRegistry): 0xbaE0076Ef6fD16Fb87c5CB46f62dB5a3f5ebF820
