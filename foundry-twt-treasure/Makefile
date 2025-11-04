@@ -39,10 +39,10 @@ NETWORK_ARGS := --rpc-url http://localhost:8545 --private-key $(DEFAULT_ANVIL_KE
 NETWORK_SEPOLIA:= --rpc-url $(SEPOLIA_RPC_URL) --account devWallet --broadcast --verify --etherscan-api-key $(ETHERSCAN_API_KEY) -vvvv
 NETWORK_ROOTHASH:= --rpc-url $(ROOTHASH_RPC_URL) --private-key $(PRIVATE_KEY) --broadcast   -vvvv
 deploy-sepolia:
-	@forge script script/TheWeb3VRFDeploy.s.sol:TheWeb3VRFDepolyScript $(NETWORK_SEPOLIA)
+	@forge script script/TreasureManagerScript.s.sol:TreasureManagerScript $(NETWORK_SEPOLIA)
 
 deploy-local:
-	@forge script script/TheWeb3VRFDeploy.s.sol:TheWeb3VRFDepolyScript $(NETWORK_ARGS)
+	@forge script script/TreasureManagerScript.s.sol:TreasureManagerScript $(NETWORK_ARGS)
 
 deploy-roothash:
-	@forge script script/TheWeb3VRFDeploy.s.sol:TheWeb3VRFDepolyScript $(NETWORK_ROOTHASH)
+	@forge script script/TreasureManagerScript.s.sol:TreasureManagerScript $(NETWORK_ROOTHASH)
