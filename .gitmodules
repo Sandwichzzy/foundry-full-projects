@@ -49,3 +49,12 @@
 [submodule "foundry-vrf-BLS/lib/openzeppelin-foundry-upgrades"]
 	path = foundry-vrf-BLS/lib/openzeppelin-foundry-upgrades
 	url = https://github.com/OpenZeppelin/openzeppelin-foundry-upgrades
+[submodule "foundry-twt-treasure/lib/forge-std"]
+	path = foundry-twt-treasure/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "foundry-twt-treasure/lib/openzeppelin-contracts-upgradeable"]
+	path = foundry-twt-treasure/lib/openzeppelin-contracts-upgradeable
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable
+[submodule "foundry-twt-treasure/lib/openzeppelin-contracts"]
+	path = foundry-twt-treasure/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
