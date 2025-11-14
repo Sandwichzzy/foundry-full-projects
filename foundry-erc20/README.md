@@ -1,69 +1,160 @@
-## Foundry
+# SWToken - ERC20 Token Project
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+A complete ERC20 token implementation built with Foundry framework, featuring comprehensive testing and deployment scripts.
 
-Foundry consists of:
+## 📋 Project Overview
 
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+SWToken is a standard ERC20 token smart contract that provides:
 
-## Documentation
+- Standard ERC20 functionality (transfer, approve, allowance)
+- Secure implementation using OpenZeppelin contracts
+- Comprehensive test coverage
+- Automated deployment scripts
+- Multi-network deployment support
 
-https://book.getfoundry.sh/
+## 🚀 Deployed Contracts
 
-## Usage
+- **RootHash Network**: `0x26fc1d2B482EbA8e88535FCbA2c6dCe902B2752f`
+- **Sepolia Testnet**: `0xf43C3CFF8c11F2d3ebf8C6d796Ed60020Fc66286`
 
-### Build
+## 📁 Project Structure
 
-```shell
-$ forge build
+```
+├── src/
+│   ├── SWToken.sol           # Main ERC20 token contract
+│   └── Manualerc20Token.sol  # Manual ERC20 implementation
+├── script/
+│   └── DeploySWToken.s.sol   # Deployment script
+├── test/
+│   └── SWTokenTest.t.sol     # Comprehensive test suite
+├── lib/                      # Dependencies (OpenZeppelin, Forge-std)
+└── broadcast/                # Deployment artifacts
 ```
 
-### Test
+## 🛠️ Prerequisites
+
+- [Foundry](https://getfoundry.sh/) installed
+- Git installed
+- An Ethereum wallet with testnet ETH
+
+## ⚡ Quick Start
+
+### 1. Clone and Setup
 
 ```shell
-$ forge test
+git clone <your-repo-url>
+cd foundry-erc20
+forge install
 ```
 
-### Format
+### 2. Build the Project
 
 ```shell
-$ forge fmt
+forge build
 ```
 
-### Gas Snapshots
+### 3. Run Tests
 
 ```shell
-$ forge snapshot
+forge test
 ```
 
-### Anvil
+### 4. Run Tests with Verbosity
 
 ```shell
-$ anvil
+forge test -vvv
 ```
 
-### Deploy
+## 📝 Available Commands
+
+### Development
 
 ```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+# Build contracts
+forge build
+
+# Run all tests
+forge test
+
+# Run specific test
+forge test --match-test testTransfer
+
+# Format code
+forge fmt
+
+# Generate gas snapshots
+forge snapshot
 ```
 
-### Cast
+### Deployment
 
 ```shell
-$ cast <subcommand>
+# Deploy to local network (Anvil)
+anvil
+forge script script/DeploySWToken.s.sol --rpc-url http://localhost:8545 --private-key <your-private-key> --broadcast
+
+# Deploy to Sepolia testnet
+forge script script/DeploySWToken.s.sol --rpc-url $SEPOLIA_RPC_URL --private-key $PRIVATE_KEY --broadcast --verify
+
+# Deploy to RootHash network
+forge script script/DeploySWToken.s.sol --rpc-url $ROOTHASH_RPC_URL --private-key $PRIVATE_KEY --broadcast
 ```
 
-### Help
+### Interaction with Cast
 
 ```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+# Check balance
+cast call <contract-address> "balanceOf(address)" <wallet-address> --rpc-url <rpc-url>
+
+# Get token symbol
+cast call <contract-address> "symbol()" --rpc-url <rpc-url>
+
+# Get token name
+cast call <contract-address> "name()" --rpc-url <rpc-url>
+
+# Get total supply
+cast call <contract-address> "totalSupply()" --rpc-url <rpc-url>
 ```
 
-contract SWToken RootHash:0x26fc1d2B482EbA8e88535FCbA2c6dCe902B2752f
-contract SWToken Sepolia:0xf43C3CFF8c11F2d3ebf8C6d796Ed60020Fc66286
+## 🧪 Testing
+
+The project includes comprehensive tests covering:
+
+- Token deployment and initialization
+- Transfer functionality
+- Approval and allowance mechanisms
+- Edge cases and error conditions
+
+Run tests with different verbosity levels:
+
+```shell
+forge test                # Basic output
+forge test -v            # Show test results
+forge test -vv           # Show test results + logs
+forge test -vvv          # Show test results + logs + stack traces
+```
+
+## 🌐 Network Configuration
+
+### Supported Networks:
+
+- **Local (Anvil)**: `http://localhost:8545`
+- **Sepolia Testnet**: Use your preferred RPC provider
+- **RootHash Network**: Use RootHash RPC endpoint
+
+### Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
+PRIVATE_KEY=your_private_key_here
+SEPOLIA_RPC_URL=your_sepolia_rpc_url
+ROOTHASH_RPC_URL=your_roothash_rpc_url
+ETHERSCAN_API_KEY=your_etherscan_api_key
+```
+
+## 📚 Documentation
+
+- [Foundry Documentation](https://book.getfoundry.sh/)
+- [OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts/)
+- [ERC20 Standard](https://eips.ethereum.org/EIPS/eip-20)
