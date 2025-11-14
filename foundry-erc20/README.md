@@ -64,3 +64,6 @@ $ forge --help
 $ anvil --help
 $ cast --help
 ```
+
+contract SWToken RootHash:0x26fc1d2B482EbA8e88535FCbA2c6dCe902B2752f
+contract SWToken Sepolia:0xf43C3CFF8c11F2d3ebf8C6d796Ed60020Fc66286

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {Script} from "forge-std/Script.sol";
+import {Script,console} from "forge-std/Script.sol";
 import {SWToken} from "../src/SWToken.sol";
 
 contract DeploySWToken is Script {
@@ -12,6 +12,8 @@ contract DeploySWToken is Script {
     function run() external returns (SWToken) {
       vm.startBroadcast();
       swToken = new SWToken(INITIAL_SUPPLY);
+      console.log("SWToken deployed to:", address(swToken));
+      console.log("Deployment complete.");
       vm.stopBroadcast();
       return swToken;
     }
