@@ -58,3 +58,9 @@
 [submodule "foundry-twt-treasure/lib/openzeppelin-contracts"]
 	path = foundry-twt-treasure/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "foundry-Account-abstraction/lib/openzeppelin-contracts-upgradeable"]
+	path = foundry-Account-abstraction/lib/openzeppelin-contracts-upgradeable
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable
+[submodule "foundry-Account-abstraction/lib/foundry-devops"]
+	path = foundry-Account-abstraction/lib/foundry-devops
+	url = https://github.com/Cyfrin/foundry-devops
